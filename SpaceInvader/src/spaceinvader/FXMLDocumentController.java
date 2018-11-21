@@ -8,6 +8,7 @@ package spaceinvader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -26,6 +27,8 @@ public class FXMLDocumentController implements Initializable {
     private ArrayList<Enemy3> enemyThree = new ArrayList<>();
     private ArrayList<Enemy4> enemyFour = new ArrayList<>();
     private ArrayList<GameObject> objectList = new ArrayList<>();
+    private Player ship = new Player(new Vector2D(15,600), new Vector2D(0.0,0.0));
+    
     
     @FXML
     AnchorPane pane;
@@ -45,10 +48,10 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         for (int i = 0; i < 8; i++) {
-            enemyOne.add(new Enemy1(new Vector2D(210 + i * 60, 50)));
-            enemyTwo.add(new Enemy2(new Vector2D(210 + i * 60, 100)));
-            enemyThree.add(new Enemy3(new Vector2D(210 + i * 60, 150)));
-            enemyFour.add(new Enemy4(new Vector2D(210 + i * 60, 200)));
+            enemyOne.add(new Enemy1(new Vector2D(225 + i * 60, 50)));
+            enemyTwo.add(new Enemy2(new Vector2D(225 + i * 60, 100)));
+            enemyThree.add(new Enemy3(new Vector2D(225 + i * 60, 150)));
+            enemyFour.add(new Enemy4(new Vector2D(225 + i * 60, 200)));
         }
         
         for(Enemy1 x : enemyOne){
@@ -66,6 +69,16 @@ public class FXMLDocumentController implements Initializable {
         for(Enemy4 w : enemyFour){
             addToPane(w.getCircle());
         }
+        
+        addToPane(ship.getCircle());
+        
+        
+        new AnimationTimer(){
+            @Override
+            public void handle(long now) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        }.start();
     }    
     
 }

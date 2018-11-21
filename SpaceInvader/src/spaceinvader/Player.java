@@ -9,14 +9,14 @@ package spaceinvader;
  *
  * @author cstuser
  */
-public class Player extends Shooter {
+public class Player extends GameObject {
 
-    public Player(double x, double y, double radius) {
-      super(x, y, radius);
+    public Player(Vector2D position, Vector2D velocity) {
+        super(position, velocity, new Vector2D(0.0,0.0), 15);
     }
 
     public Projectile shoot(Vector2D position) {
-      super.shoot(position, new Vector2D(0.0, 75.0));
+      return new Projectile(position,new Vector2D(0.0,75));
     }
 
 }
