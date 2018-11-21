@@ -9,13 +9,14 @@ package spaceinvader;
  *
  * @author cstuser
  */
-public class Projectile extends GameObject {
+public class Enemy extends Shooter {
 
-    public Projectile(Vector2D position, Vector2D velocity) {
-        // radius of projectile can be 10 px
-        super(position, velocity, new Vector2D(0.0,0.0), 10);
+    public Enemy(double x, double y, double radius) {
+      super(x, y, radius);
     }
 
-
+    public Projectile shoot(Vector2D position) {
+      super.shoot(position, new Vector2D(0.0, -75.0));
+    }
 
 }
