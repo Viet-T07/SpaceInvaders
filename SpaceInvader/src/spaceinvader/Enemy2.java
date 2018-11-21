@@ -11,8 +11,12 @@ package spaceinvader;
  */
 public class Enemy2 extends GameObject {
     
-    public Enemy2(Vector2D position, Vector2D velocity, Vector2D acceleration, double radius) {
-        super(position, velocity, acceleration, radius);
+    public Enemy2(Vector2D position) {
+        super(position, new Vector2D(0.0,0.0), new Vector2D(0.0,0.0), 15);
+    }
+
+    public void setPosition(Vector2D position) {
+        this.position = position;
     }
     
 }

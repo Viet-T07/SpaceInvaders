@@ -1,2 +1,4 @@
 /SpaceInvader/nbproject
 .DS_store
+/SpaceInvader/dist/
+/SpaceInvader/build/

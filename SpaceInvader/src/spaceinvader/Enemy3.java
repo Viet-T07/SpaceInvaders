@@ -9,6 +9,13 @@ package spaceinvader;
  *
  * @author cstuser
  */
-public class Enemy3 {
+public class Enemy3 extends GameObject {
+    public Enemy3(Vector2D position) {
+        super(position, new Vector2D(0.0,0.0), new Vector2D(0.0,0.0), 15);
+    }
+
+    public void setPosition(Vector2D position) {
+        this.position = position;
+    }
     
 }

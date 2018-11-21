@@ -10,7 +10,7 @@ package spaceinvader;
  * @author cstuser
  */
 public class Vector2D {
-      private double x;
+    private double x;
     private double y;
 
     public Vector2D(double x, double y) {
