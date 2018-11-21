@@ -41,7 +41,7 @@ public class AssetManager {
         
         Image background = new Image(fileURL("./assets/images"));
         
-         backgroundImage = new Background(
+        backgroundImage = new Background(
                             new BackgroundImage(background, 
                                                 BackgroundRepeat.NO_REPEAT, 
                                                 BackgroundRepeat.NO_REPEAT, 

@@ -45,6 +45,23 @@ public class GameObject {
 
     }
 
+    public void setCircle(Circle circle) {
+        this.circle = circle;
+    }
+
+    public void setPosition(Vector2D position) {
+        this.position = position;
+    }
+
+    public void setVelocity(Vector2D velocity) {
+        this.velocity = velocity;
+    }
+
+    public void setAcceleration(Vector2D acceleration) {
+        this.acceleration = acceleration;
+    }
+    
+    
     public Vector2D getPosition() {
         return position;
     }

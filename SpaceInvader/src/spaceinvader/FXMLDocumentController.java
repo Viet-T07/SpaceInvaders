@@ -8,6 +8,7 @@ package spaceinvader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -22,23 +23,28 @@ import javafx.scene.layout.AnchorPane;
  */
 public class FXMLDocumentController implements Initializable {
     
-    private ArrayList<Enemy1> enemyOne = new ArrayList<>();
-    private ArrayList<Enemy2> enemyTwo = new ArrayList<>();
-    private ArrayList<Enemy3> enemyThree = new ArrayList<>();
-    private ArrayList<Enemy4> enemyFour = new ArrayList<>();
+    private ArrayList<Enemy> enemyList = new ArrayList<>();
     private ArrayList<GameObject> objectList = new ArrayList<>();
     private Player ship = new Player(new Vector2D(15,600), new Vector2D(0.0,0.0));
-    
+    private double lastFrameTime = 0.0;
     
     @FXML
     AnchorPane pane;
     
     @FXML
     private void onMouseClicked(MouseEvent e) {
+        final float PROJECTILE_SPEED = 700;
+        Vector2D position = ship.getPosition();
+        Vector2D velocity = new Vector2D(0.0,-PROJECTILE_SPEED);
+        Projectile projectile = new Projectile(position,velocity);
+        addToPane(projectile.getCircle());
+        objectList.add(projectile);
     }
     
     @FXML
     private void onMouseMoved(MouseEvent e){
+        ship.setPosition(new Vector2D(e.getX(),585));
+        objectList.add(ship);
     }
     
     public void addToPane(Node node){
@@ -47,36 +53,35 @@ public class FXMLDocumentController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        for (int i = 0; i < 8; i++) {
-            enemyOne.add(new Enemy1(new Vector2D(225 + i * 60, 50)));
-            enemyTwo.add(new Enemy2(new Vector2D(225 + i * 60, 100)));
-            enemyThree.add(new Enemy3(new Vector2D(225 + i * 60, 150)));
-            enemyFour.add(new Enemy4(new Vector2D(225 + i * 60, 200)));
-        }
+        lastFrameTime = 0.0f;
+        long initialTime = System.nanoTime();
         
-        for(Enemy1 x : enemyOne){
-           addToPane(x.getCircle());
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 8; j++) {
+                enemyList.add(new Enemy(new Vector2D(225 + j * 60, 50 + i*50)));
+            }
         }
-        
-        for(Enemy2 y : enemyTwo){
-            addToPane(y.getCircle());
-        }
-        
-        for(Enemy3 z : enemyThree){
-            addToPane(z.getCircle());
-        }
-        
-        for(Enemy4 w : enemyFour){
-            addToPane(w.getCircle());
-        }
-        
+    
+
+        enemyList.forEach((x) -> {
+            addToPane(x.getCircle());
+        });
+
         addToPane(ship.getCircle());
         
         
         new AnimationTimer(){
             @Override
             public void handle(long now) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                double currentTime = (now - initialTime)/1000000000.0;
+                double frameDeltaTime = currentTime - lastFrameTime;
+                lastFrameTime = currentTime;
+                
+                for(GameObject obj: objectList){
+                    obj.update(frameDeltaTime);
+                }
+                
+                
             }
         }.start();
     }    
