@@ -12,7 +12,7 @@ package spaceinvader;
 public class Player extends GameObject {
 
     public Player(Vector2D position, Vector2D velocity) {
-        super(position, new Vector2D(0.0,0.0), new Vector2D(0.0,0.0), 15);
+        super(position, new Vector2D(0.0,0.0), new Vector2D(0.0,0.0), 25);
     }
 
     public Projectile shoot(Vector2D position) {

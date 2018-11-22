@@ -25,6 +25,8 @@ public class AssetManager {
     static private Background backgroundImage = null;
     static private ArrayList<ImagePattern> aliens = new ArrayList<>();
     static private ImagePattern shieldImage = null;
+    static private ImagePattern projectileImage = null;
+    static private ImagePattern shipImage = null;
     
     static private Media backgroundMusic = null;
     static private AudioClip winSound = null;
@@ -39,7 +41,7 @@ public class AssetManager {
     
     static public void preloadAllAssets(){
         
-        Image background = new Image(fileURL("./assets/images"));
+        Image background = new Image(fileURL("./assets/images/background.jpg"));
         
         backgroundImage = new Background(
                             new BackgroundImage(background, 
@@ -47,16 +49,22 @@ public class AssetManager {
                                                 BackgroundRepeat.NO_REPEAT, 
                                                 BackgroundPosition.DEFAULT,
                                                 BackgroundSize.DEFAULT));
+        aliens.add(new ImagePattern(new Image(fileURL("./assets/images/alien.png"))));
+        aliens.add(new ImagePattern(new Image(fileURL("./assets/images/invader.png"))));
+        aliens.add(new ImagePattern(new Image(fileURL("./assets/images/invader2.png"))));
+        projectileImage = new ImagePattern(new Image(fileURL("./assets/images/projectile.png")));
+        shipImage = new ImagePattern(new Image(fileURL("./assets/images/ship.png")));
+        shieldImage = new ImagePattern(new Image(fileURL("./assets/images/shield.jpg")));
          backgroundMusic = new Media(fileURL("./assets/music/playing.mp3"));
          winSound = new AudioClip(fileURL("./assets/music/won.wav"));
-         loseSound = new AudioClip(fileURL("./assets/music/lose.wav"));
+         loseSound = new AudioClip(fileURL("./assets/music/lost.wav"));
          shootingSound = new AudioClip(fileURL("./assets/soundfx/hadouken.wav"));
          
          
     }
 
-    public static ArrayList<ImagePattern> getAliens() {
-        return aliens;
+    public static ImagePattern getAliens(int x) {
+        return aliens.get(x);
     }
 
     public static ImagePattern getShieldImage() {
@@ -78,25 +86,21 @@ public class AssetManager {
     public static Background getBackgroundImage() {
         return backgroundImage;
     }
-
-    public static ArrayList<ImagePattern> getPlanets() {
-        return aliens;
-    }
-
+    
     public static Media getBackgroundMusic() {
         return backgroundMusic;
-    }
-
-    public static AudioClip getNewPlanetSound() {
-        return alienSound;
     }
 
     public static AudioClip getShootingSound() {
         return shootingSound;
     }
-    
-    
-    
-    
+
+    public static ImagePattern getProjectileImage() {
+        return projectileImage;
+    }
+
+    public static ImagePattern getShipImage() {
+        return shipImage;
+    }
     
 }

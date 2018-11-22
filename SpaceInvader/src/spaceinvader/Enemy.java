@@ -11,7 +11,7 @@ package spaceinvader;
  */
 public class Enemy extends GameObject{
     public Enemy(Vector2D position) {
-        super(position, new Vector2D(0.0,0.0), new Vector2D(0.0,0.0), 15);
+        super(position, new Vector2D(0.0,0.0), new Vector2D(0.0,0.0), 25);
     }
 
     public Projectile shoot(Vector2D position) {
