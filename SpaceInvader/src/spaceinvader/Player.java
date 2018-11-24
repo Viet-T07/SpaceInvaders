@@ -11,13 +11,24 @@ package spaceinvader;
  */
 public class Player extends GameObject {
 
-    public Player(Vector2D position, Vector2D velocity) {
-        super(position, new Vector2D(0.0,0.0), new Vector2D(0.0,0.0), 25);
+    protected int lives;
+
+    public Player(Vector2D position) {
+        super(position, new Vector2D(0.0, 0.0), new Vector2D(0.0, 0.0), 25);
+        lives = 3;
     }
 
     public Projectile shoot(Vector2D position) {
-      return new Projectile(position,new Vector2D(0.0,75));
+      return new Projectile(position, new Vector2D(0.0, -700));
     }
-    
+
+    public void addDamage() {
+      lives--;
+    }
+
+    public Integer getLives() {
+      return lives;
+    }
+
 
 }
