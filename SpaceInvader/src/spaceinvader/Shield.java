@@ -5,18 +5,22 @@
  */
 package spaceinvader;
 
+
+
 /**
  *
  * @author cstuser
  */
-public class Shield extends Circle {
+public class Shield extends GameObject {
 
     protected int damage;
 
-    public Shield(double x) {
-        super(x, 20.0, 30);
+    public Shield(Vector2D position) {
+        super(position, new Vector2D(0.0,0.0), new Vector2D(0.0,0.0), 50);
         damage = 0;
     }
+
+
 
     public void addDamage() {
       damage++;

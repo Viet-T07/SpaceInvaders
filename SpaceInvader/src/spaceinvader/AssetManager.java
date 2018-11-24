@@ -52,13 +52,13 @@ public class AssetManager {
         aliens.add(new ImagePattern(new Image(fileURL("./assets/images/alien.png"))));
         aliens.add(new ImagePattern(new Image(fileURL("./assets/images/invader.png"))));
         aliens.add(new ImagePattern(new Image(fileURL("./assets/images/invader2.png"))));
-        projectileImage = new ImagePattern(new Image(fileURL("./assets/images/projectile.png")));
+        projectileImage = new ImagePattern(new Image(fileURL("./assets/images/projectile1.png")));
         shipImage = new ImagePattern(new Image(fileURL("./assets/images/ship.png")));
-        shieldImage = new ImagePattern(new Image(fileURL("./assets/images/shield.jpg")));
-         backgroundMusic = new Media(fileURL("./assets/music/playing.mp3"));
-         winSound = new AudioClip(fileURL("./assets/music/won.wav"));
-         loseSound = new AudioClip(fileURL("./assets/music/lost.wav"));
-         shootingSound = new AudioClip(fileURL("./assets/soundfx/hadouken.wav"));
+        shieldImage = new ImagePattern(new Image(fileURL("./assets/images/shield.png")));
+        backgroundMusic = new Media(fileURL("./assets/music/playing.mp3"));
+        winSound = new AudioClip(fileURL("./assets/music/won.wav"));
+        loseSound = new AudioClip(fileURL("./assets/music/lost.wav"));
+        shootingSound = new AudioClip(fileURL("./assets/soundfx/hadouken.wav"));
          
          
     }
