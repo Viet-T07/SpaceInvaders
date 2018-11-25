@@ -15,6 +15,6 @@ public class Enemy extends GameObject{
     }
 
     public Projectile shoot(Vector2D position) {
-      return new Projectile(position,new Vector2D(0.0,700));
+      return new Projectile(position,new Vector2D(0.0,350));
     }
 }

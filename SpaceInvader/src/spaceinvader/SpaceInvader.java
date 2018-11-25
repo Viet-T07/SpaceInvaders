@@ -5,6 +5,7 @@
  */
 package spaceinvader;
 
+import java.net.URL;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
@@ -20,11 +21,19 @@ public class SpaceInvader extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-        
+        URL sceneFile = getClass().getResource("FXMLDocument.fxml");
+        FXMLLoader loader = new FXMLLoader(sceneFile);
+        Parent root = loader.load();
         Scene scene = new Scene(root);
+        
+        
+        
         scene.setCursor(Cursor.NONE);
         stage.setScene(scene);
+        
+        FXMLDocumentController controller = loader.getController();
+        stage.setOnHidden(event-> controller.shutdown());
+
         stage.show();
     }
 

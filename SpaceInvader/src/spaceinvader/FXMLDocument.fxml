@@ -2,19 +2,35 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane id="AnchorPane" fx:id="pane" onMouseClicked="#onMouseClicked" onMouseMoved="#onMouseMoved" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="spaceinvader.FXMLDocumentController">
+<AnchorPane id="AnchorPane" fx:id="pane" onMouseClicked="#onMouseClicked" onMouseMoved="#onMouseMoved" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="spaceinvader.FXMLDocumentController">
    <children>
       <Label fx:id="winLabel" alignment="CENTER" layoutX="283.0" layoutY="248.0" prefHeight="52.0" prefWidth="334.0" text="You Win!" textFill="#37da48" visible="false">
          <font>
-            <Font name="Comic Sans MS Bold" size="28.0" />
+            <Font name="Space Invaders Regular" size="28.0" />
          </font>
       </Label>
-      <Label fx:id="loseLabel" alignment="CENTER" layoutX="293.0" layoutY="258.0" prefHeight="52.0" prefWidth="334.0" text="You Lost" textFill="RED" visible="false">
+      <Label fx:id="loseLabel" alignment="CENTER" layoutX="283.0" layoutY="248.0" prefHeight="52.0" prefWidth="334.0" text="You Lost" textFill="RED" visible="false">
          <font>
-            <Font name="Comic Sans MS Bold" size="28.0" />
+            <Font name="Space Invaders Regular" size="28.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" prefHeight="30.0" prefWidth="133.0" text="Score" textFill="WHITE">
+         <font>
+            <Font name="Space Invaders Regular" size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="scoreLabel" alignment="CENTER" layoutY="39.0" prefHeight="30.0" prefWidth="133.0" text="Number" textFill="WHITE">
+         <font>
+            <Font name="Space Invaders Regular" size="18.0" />
+         </font>
+      </Label>
+      <Line endX="791.0" layoutX="109.0" layoutY="625.0" startX="-108.9999771118164" stroke="#37da48" />
+      <Label fx:id="livesLabel" alignment="CENTER" layoutX="8.0" layoutY="644.0" prefHeight="39.0" prefWidth="67.0" text="Lives" textFill="#37da48">
+         <font>
+            <Font name="Space Invaders Regular" size="18.0" />
          </font>
       </Label>
    </children>

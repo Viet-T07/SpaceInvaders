@@ -8,7 +8,11 @@ package spaceinvader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -27,15 +31,16 @@ import javafx.scene.shape.Circle;
 public class FXMLDocumentController implements Initializable {
 
     private ArrayList<Enemy> enemyList = new ArrayList<>();
-    private ArrayList<Enemy> tempEnemy = new ArrayList<>();
     private ArrayList<GameObject> objectList = new ArrayList<>();
+    private ArrayList<Projectile> alienProjectileList = new ArrayList();
     private ArrayList<Shield> shieldList = new ArrayList<>();
+    private ArrayList<Player> playerLives = new ArrayList<>();
     private Player ship = new Player(new Vector2D(15, 600));
     private double lastFrameTime = 0.0;
     private double xOffset = 50;
     private double yOffset = 0;
-
-    private int arrayPosition = 7;
+    private int score = 0;
+    ScheduledExecutorService projectileExecutor = null;
 
     @FXML
     AnchorPane pane;
@@ -45,6 +50,12 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     Label loseLabel;
+
+    @FXML
+    Label scoreLabel;
+
+    @FXML
+    Label livesLabel;
 
     @FXML
     private void onMouseClicked(MouseEvent e) {
@@ -71,18 +82,30 @@ public class FXMLDocumentController implements Initializable {
         pane.getChildren().remove(node);
     }
 
+    public void shutdown(){
+        if(projectileExecutor != null){
+            projectileExecutor.shutdown();
+        }
+        Platform.exit();
+    }
+    
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        scoreLabel.setText(Integer.toString(score));
+        livesLabel.setText(Integer.toString(ship.getLives()));
         lastFrameTime = 0.0f;
         long initialTime = System.nanoTime();
 
         AssetManager.preloadAllAssets();
         pane.setBackground(AssetManager.getBackgroundImage());
 
+        //Start Background music
         Media sound = AssetManager.getBackgroundMusic();
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
         mediaPlayer.play();
 
+        //Display shields on the pane
         for (int i = 0; i < 3; i++) {
             Shield shield = new Shield(new Vector2D(180 + i * 270, 475));
             shield.getCircle().setFill(AssetManager.getShieldImage());
@@ -90,9 +113,10 @@ public class FXMLDocumentController implements Initializable {
             addToPane(shield.getCircle());
         }
 
+        //Display enemies on the pane
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 8; j++) {
-                Enemy enemy = new Enemy(new Vector2D(215 + j * 60, 50 + i * 50));
+                Enemy enemy = new Enemy(new Vector2D(215 + j * 60, 75 + i * 50));
                 if (i == 0 || i == 1) {
                     enemy.getCircle().setFill(AssetManager.getAliens(0));
                 }
@@ -106,7 +130,37 @@ public class FXMLDocumentController implements Initializable {
 
             }
         }
+        
+        projectileExecutor = Executors.newSingleThreadScheduledExecutor();
+        projectileExecutor.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        int randomEnemy = (int) (Math.random() * enemyList.size());
+                        Projectile projectile = enemyList.get(randomEnemy).shoot(enemyList.get(randomEnemy).getPosition());
+                        projectile.getCircle().setFill(AssetManager.getAlienProjectile());
+                        alienProjectileList.add(projectile);
+                        addToPane(projectile.getCircle());
+                    }
+                });
+            }
+        }, 2, 2, TimeUnit.SECONDS);
 
+        alienProjectileList.forEach((Projectile x) -> {
+            addToPane(x.getCircle());
+        });
+
+        //Display the number of lives
+        for (int i = 0; i < ship.getLives() - 1; i++) {
+            Player shipLives = new Player(new Vector2D(88 + i * 55, 669));
+            shipLives.getCircle().setFill(AssetManager.getShipImage());
+            playerLives.add(shipLives);
+            addToPane(shipLives.getCircle());
+        }
+
+        //Add enemies to the pane
         enemyList.forEach((x) -> {
             addToPane(x.getCircle());
         });
@@ -121,6 +175,7 @@ public class FXMLDocumentController implements Initializable {
                 double frameDeltaTime = currentTime - lastFrameTime;
                 lastFrameTime = currentTime;
 
+                //Verify the bounds 
                 for (GameObject edgeCheck : enemyList) {
                     if (edgeCheck.getPosition().getX() >= pane.getPrefWidth() - 25.0) {
                         if (yOffset == 0) {
@@ -144,7 +199,12 @@ public class FXMLDocumentController implements Initializable {
                     }
                 }
 
+                //Update objects
                 ship.update(frameDeltaTime);
+
+                for (GameObject projectile : alienProjectileList) {
+                    projectile.update(frameDeltaTime);
+                }
 
                 for (GameObject obj : objectList) {
                     obj.update(frameDeltaTime);
@@ -170,6 +230,7 @@ public class FXMLDocumentController implements Initializable {
                     ene.update(frameDeltaTime);
                 }
 
+                //Verify Collision between aliens and the projectile
                 for (int i = 0; i < objectList.size(); i++) {
                     for (int j = 0; j < enemyList.size(); j++) {
                         if (!objectList.isEmpty() && !enemyList.isEmpty()) {
@@ -178,18 +239,21 @@ public class FXMLDocumentController implements Initializable {
                             Vector2D c1 = new Vector2D(circle1.getCenterX(), circle1.getCenterY());
                             Vector2D c2 = new Vector2D(circle2.getCenterX(), circle2.getCenterY());
                             Vector2D n = c2.sub(c1);
-                            //Verify Collision between the aliens and the projectiles
                             double distance = n.magnitude();
                             if (distance < circle1.getRadius() + circle2.getRadius()) {
                                 removeFromPane(circle1);
                                 objectList.remove(i);
                                 removeFromPane(circle2);
                                 enemyList.remove(j);
+                                score += 10;
+                                scoreLabel.setText(Integer.toString(score));
                             }
 
                         }
                     }
                 }
+
+                //Set the win condition
                 if (enemyList.isEmpty()) {
                     winLabel.setVisible(true);
                     mediaPlayer.stop();

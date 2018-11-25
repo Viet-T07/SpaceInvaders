@@ -27,6 +27,7 @@ public class AssetManager {
     static private ImagePattern shieldImage = null;
     static private ImagePattern projectileImage = null;
     static private ImagePattern shipImage = null;
+    static private ImagePattern alienProjectile = null;
     
     static private Media backgroundMusic = null;
     static private AudioClip winSound = null;
@@ -53,6 +54,7 @@ public class AssetManager {
         aliens.add(new ImagePattern(new Image(fileURL("./assets/images/invader.png"))));
         aliens.add(new ImagePattern(new Image(fileURL("./assets/images/invader2.png"))));
         projectileImage = new ImagePattern(new Image(fileURL("./assets/images/projectile1.png")));
+        alienProjectile = new ImagePattern(new Image(fileURL("./assets/images/projectile.png")));
         shipImage = new ImagePattern(new Image(fileURL("./assets/images/ship.png")));
         shieldImage = new ImagePattern(new Image(fileURL("./assets/images/shield.png")));
         backgroundMusic = new Media(fileURL("./assets/music/playing.mp3"));
@@ -61,6 +63,10 @@ public class AssetManager {
         shootingSound = new AudioClip(fileURL("./assets/soundfx/hadouken.wav"));
          
          
+    }
+
+    public static ImagePattern getAlienProjectile() {
+        return alienProjectile;
     }
 
     public static ImagePattern getAliens(int x) {
