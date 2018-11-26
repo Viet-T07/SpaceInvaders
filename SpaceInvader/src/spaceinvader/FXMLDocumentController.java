@@ -40,6 +40,7 @@ public class FXMLDocumentController implements Initializable {
     private double xOffset = 50;
     private double yOffset = 0;
     private int score = 0;
+    private int lives = ship.getLives();
     ScheduledExecutorService projectileExecutor = null;
 
     @FXML
@@ -82,14 +83,13 @@ public class FXMLDocumentController implements Initializable {
         pane.getChildren().remove(node);
     }
 
-    public void shutdown(){
-        if(projectileExecutor != null){
+    public void shutdown() {
+        if (projectileExecutor != null) {
             projectileExecutor.shutdown();
         }
         Platform.exit();
     }
-    
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         scoreLabel.setText(Integer.toString(score));
@@ -130,7 +130,7 @@ public class FXMLDocumentController implements Initializable {
 
             }
         }
-        
+
         projectileExecutor = Executors.newSingleThreadScheduledExecutor();
         projectileExecutor.scheduleAtFixedRate(new Runnable() {
             @Override
@@ -199,11 +199,42 @@ public class FXMLDocumentController implements Initializable {
                     }
                 }
 
-                //Update objects
+                //Update 
                 ship.update(frameDeltaTime);
 
-                for (GameObject projectile : alienProjectileList) {
-                    projectile.update(frameDeltaTime);
+                for (int i = 0; i < alienProjectileList.size(); i ++) {
+
+                    Circle circle2 = alienProjectileList.get(i).getCircle();
+                    Circle shipCircle = ship.getCircle();
+
+                    //Verify Collison between Ship and aliens
+                    Vector2D shipC = new Vector2D(shipCircle.getCenterX(), shipCircle.getCenterY());
+                    Vector2D c2 = new Vector2D(circle2.getCenterX(), circle2.getCenterY());
+                    Vector2D z = c2.sub(shipC);
+                    double shipDistance = z.magnitude();
+                    if (shipDistance < shipCircle.getRadius() + circle2.getRadius()) {
+                        ship.setLives(--lives);
+                        removeFromPane(circle2);
+                        alienProjectileList.remove(i);
+                        
+                        
+                        if (ship.getLives() == 0) {
+                            loseLabel.setVisible(true);
+                            mediaPlayer.stop();
+                            AudioClip lost = AssetManager.getLoseSound();
+                            lost.play();
+                            this.stop();
+                            projectileExecutor.shutdown();
+                        }
+                        if (ship.getLives() < 3 && !playerLives.isEmpty()) {
+                            playerLives.remove(playerLives.size()-1);
+                            removeFromPane(playerLives.get(playerLives.size() - 1).getCircle());
+                            livesLabel.setText(Integer.toString(lives));
+                        }
+
+                    }
+
+                    alienProjectileList.get(i).update(frameDeltaTime);
                 }
 
                 for (GameObject obj : objectList) {

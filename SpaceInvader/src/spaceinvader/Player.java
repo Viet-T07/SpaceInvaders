@@ -22,6 +22,10 @@ public class Player extends GameObject {
       return new Projectile(position, new Vector2D(0.0, -700));
     }
 
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+    
     public void addDamage() {
       lives--;
     }
