@@ -202,7 +202,7 @@ public class FXMLDocumentController implements Initializable {
                 //Update 
                 ship.update(frameDeltaTime);
 
-                for (int i = 0; i < alienProjectileList.size(); i ++) {
+                for (int i = 0; i < alienProjectileList.size(); i++) {
 
                     Circle circle2 = alienProjectileList.get(i).getCircle();
                     Circle shipCircle = ship.getCircle();
@@ -210,46 +210,57 @@ public class FXMLDocumentController implements Initializable {
                     //Verify Collison between Ship and aliens
                     Vector2D shipC = new Vector2D(shipCircle.getCenterX(), shipCircle.getCenterY());
                     Vector2D c2 = new Vector2D(circle2.getCenterX(), circle2.getCenterY());
+
                     Vector2D z = c2.sub(shipC);
                     double shipDistance = z.magnitude();
+
                     if (shipDistance < shipCircle.getRadius() + circle2.getRadius()) {
                         ship.setLives(--lives);
                         removeFromPane(circle2);
-                        alienProjectileList.remove(i);
+
+                        if (!alienProjectileList.isEmpty() && i < alienProjectileList.size()) {
+                            alienProjectileList.remove(i);
+                        }
                         livesLabel.setText(Integer.toString(lives));
-                        
+
                         if (ship.getLives() == 0) {
                             loseLabel.setVisible(true);
+
                             mediaPlayer.stop();
+
                             AudioClip lost = AssetManager.getLoseSound();
                             lost.play();
+
+                            //Stop animation/executor
                             this.stop();
                             projectileExecutor.shutdown();
-                        }
-                        else if (ship.getLives() <= 1) {
-                            playerLives.remove(playerLives.size()-1);
+                        } else if (ship.getLives() <= 1) {
+                            playerLives.remove(playerLives.size() - 1);
                             removeFromPane(playerLives.get(playerLives.size() - 1).getCircle());
-                            
+
                         }
 
                     }
+                    if (!alienProjectileList.isEmpty() && i < alienProjectileList.size()) {
+                        alienProjectileList.get(i).update(frameDeltaTime);
+                    }
 
-                    alienProjectileList.get(i).update(frameDeltaTime);
                 }
 
                 for (GameObject obj : objectList) {
                     obj.update(frameDeltaTime);
                 }
                 for (GameObject ene : enemyList) {
-                    Circle circle2 = ene.getCircle();
+
+                    Circle enemyCircle = ene.getCircle();
                     Circle shipCircle = ship.getCircle();
 
                     //Verify Collison between Ship and aliens
                     Vector2D ship = new Vector2D(shipCircle.getCenterX(), shipCircle.getCenterY());
-                    Vector2D c2 = new Vector2D(circle2.getCenterX(), circle2.getCenterY());
+                    Vector2D c2 = new Vector2D(enemyCircle.getCenterX(), enemyCircle.getCenterY());
                     Vector2D z = c2.sub(ship);
                     double shipDistance = z.magnitude();
-                    if (shipDistance < shipCircle.getRadius() + circle2.getRadius()) {
+                    if (shipDistance < shipCircle.getRadius() + enemyCircle.getRadius()) {
                         loseLabel.setVisible(true);
                         mediaPlayer.stop();
                         AudioClip lost = AssetManager.getLoseSound();
@@ -265,17 +276,30 @@ public class FXMLDocumentController implements Initializable {
                 for (int i = 0; i < objectList.size(); i++) {
                     for (int j = 0; j < enemyList.size(); j++) {
                         if (!objectList.isEmpty() && !enemyList.isEmpty()) {
-                            Circle circle1 = objectList.get(i).getCircle();
-                            Circle circle2 = enemyList.get(j).getCircle();
-                            Vector2D c1 = new Vector2D(circle1.getCenterX(), circle1.getCenterY());
-                            Vector2D c2 = new Vector2D(circle2.getCenterX(), circle2.getCenterY());
+
+                            Circle projectileCircle = objectList.get(i).getCircle();
+                            Circle enemyCircle = enemyList.get(j).getCircle();
+
+                            Vector2D c1 = new Vector2D(projectileCircle.getCenterX(), projectileCircle.getCenterY());
+                            Vector2D c2 = new Vector2D(enemyCircle.getCenterX(), enemyCircle.getCenterY());
+
                             Vector2D n = c2.sub(c1);
                             double distance = n.magnitude();
-                            if (distance < circle1.getRadius() + circle2.getRadius()) {
-                                removeFromPane(circle1);
-                                objectList.remove(i);
-                                removeFromPane(circle2);
-                                enemyList.remove(j);
+
+                            if (distance < projectileCircle.getRadius() + enemyCircle.getRadius()) {
+
+                                removeFromPane(projectileCircle);
+
+                                if (!objectList.isEmpty() && i < objectList.size()) {
+                                    objectList.remove(i);
+                                }
+
+                                removeFromPane(enemyCircle);
+
+                                if (!enemyList.isEmpty() && j < enemyList.size()) {
+                                    enemyList.remove(j);
+                                }
+
                                 score += 10;
                                 scoreLabel.setText(Integer.toString(score));
                             }
