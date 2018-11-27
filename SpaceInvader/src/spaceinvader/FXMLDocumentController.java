@@ -216,7 +216,7 @@ public class FXMLDocumentController implements Initializable {
                         ship.setLives(--lives);
                         removeFromPane(circle2);
                         alienProjectileList.remove(i);
-                        
+                        livesLabel.setText(Integer.toString(lives));
                         
                         if (ship.getLives() == 0) {
                             loseLabel.setVisible(true);
@@ -226,10 +226,10 @@ public class FXMLDocumentController implements Initializable {
                             this.stop();
                             projectileExecutor.shutdown();
                         }
-                        if (ship.getLives() < 3 && !playerLives.isEmpty()) {
+                        else if (ship.getLives() <= 1) {
                             playerLives.remove(playerLives.size()-1);
                             removeFromPane(playerLives.get(playerLives.size() - 1).getCircle());
-                            livesLabel.setText(Integer.toString(lives));
+                            
                         }
 
                     }
