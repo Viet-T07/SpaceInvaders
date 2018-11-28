@@ -19,7 +19,7 @@
       </Label>
       <Label alignment="CENTER" prefHeight="30.0" prefWidth="133.0" text="Score" textFill="WHITE">
          <font>
-            <Font name="Space Invaders Regular" size="24.0" />
+            <Font name="Showcard Gothic" size="24.0" />
          </font>
       </Label>
       <Label fx:id="scoreLabel" alignment="CENTER" layoutY="39.0" prefHeight="30.0" prefWidth="133.0" text="Number" textFill="WHITE">

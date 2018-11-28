@@ -225,7 +225,6 @@ public class FXMLDocumentController implements Initializable {
 
                         if (ship.getLives() == 0) {
                             loseLabel.setVisible(true);
-
                             mediaPlayer.stop();
 
                             AudioClip lost = AssetManager.getLoseSound();
@@ -275,7 +274,7 @@ public class FXMLDocumentController implements Initializable {
                 //Verify Collision between aliens and the projectile
                 for (int i = 0; i < objectList.size(); i++) {
                     for (int j = 0; j < enemyList.size(); j++) {
-                        if (!objectList.isEmpty() && !enemyList.isEmpty()) {
+                        if (!objectList.isEmpty() && !enemyList.isEmpty() && i < objectList.size()) {
 
                             Circle projectileCircle = objectList.get(i).getCircle();
                             Circle enemyCircle = enemyList.get(j).getCircle();
@@ -307,6 +306,48 @@ public class FXMLDocumentController implements Initializable {
                         }
                     }
                 }
+                
+                //Verify collision between shields and enemy projectiles
+                for (int i = 0; i < shieldList.size(); i++) {
+                    for (int j = 0; j < alienProjectileList.size(); j++) {
+                        if(!alienProjectileList.isEmpty() && j < alienProjectileList.size()){
+                            Circle shieldCircle = shieldList.get(i).getCircle();
+                            Circle projectileCircle = alienProjectileList.get(j).getCircle();
+                            
+                            Vector2D c1 = new Vector2D(projectileCircle.getCenterX(), projectileCircle.getCenterY());
+                            Vector2D c2 = new Vector2D(shieldCircle.getCenterX(), shieldCircle.getCenterY());
+
+                            Vector2D n = c2.sub(c1);
+                            double distance = n.magnitude();
+                            if (distance < projectileCircle.getRadius() + shieldCircle.getRadius()) {
+                                removeFromPane(alienProjectileList.get(j).getCircle());
+                                alienProjectileList.remove(j);
+                            }   
+                        }
+                    }
+                }
+                
+                //Verify collision between shields and ship projectiles
+                for (int i = 0; i < shieldList.size(); i++) {
+                    for (int j = 0; j < objectList.size(); j++) {
+                        if(!alienProjectileList.isEmpty() && j < objectList.size()){
+                            Circle shieldCircle = shieldList.get(i).getCircle();
+                            Circle projectileCircle = objectList.get(j).getCircle();
+                            
+                            Vector2D c1 = new Vector2D(projectileCircle.getCenterX(), projectileCircle.getCenterY());
+                            Vector2D c2 = new Vector2D(shieldCircle.getCenterX(), shieldCircle.getCenterY());
+
+                            Vector2D n = c2.sub(c1);
+                            double distance = n.magnitude();
+                            if (distance < projectileCircle.getRadius() + shieldCircle.getRadius()) {
+                                removeFromPane(objectList.get(j).getCircle());
+                                objectList.remove(j);
+                            }   
+                        }
+                    }
+                }
+                
+                
 
                 //Set the win condition
                 if (enemyList.isEmpty()) {
