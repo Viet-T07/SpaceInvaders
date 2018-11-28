@@ -128,6 +128,7 @@ public class FXMLDocumentController implements Initializable {
                     @Override
                     public void run() {
                         int randomEnemy = (int) (Math.random() * enemyList.size());
+                        
                         Projectile projectile = enemyList.get(randomEnemy).shoot(enemyList.get(randomEnemy).getPosition());
                         projectile.getCircle().setFill(AssetManager.getAlienProjectile());
                         alienProjectileList.add(projectile);
@@ -235,9 +236,9 @@ public class FXMLDocumentController implements Initializable {
 
                 }
 
-                for (GameObject obj : objectList) {
+                objectList.forEach((obj) -> {
                     obj.update(frameDeltaTime);
-                }
+                });
                 for (GameObject ene : enemyList) {
 
                     Circle enemyCircle = ene.getCircle();
@@ -320,7 +321,7 @@ public class FXMLDocumentController implements Initializable {
                 //Verify collision between shields and ship projectiles
                 for (int i = 0; i < shieldList.size(); i++) {
                     for (int j = 0; j < objectList.size(); j++) {
-                        if(!alienProjectileList.isEmpty() && j < objectList.size()){
+                        if(!shieldList.isEmpty() && j < objectList.size()){
                             Circle shieldCircle = shieldList.get(i).getCircle();
                             Circle projectileCircle = objectList.get(j).getCircle();
                             
