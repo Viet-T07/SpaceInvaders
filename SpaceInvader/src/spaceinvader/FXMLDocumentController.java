@@ -13,9 +13,11 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -42,6 +44,7 @@ public class FXMLDocumentController implements Initializable {
     private int score = 0;
     private int lives = ship.getLives();
     ScheduledExecutorService projectileExecutor = null;
+    private MediaPlayer mediaPlayer;
 
     @FXML
     AnchorPane pane;
@@ -57,6 +60,12 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     Label livesLabel;
+    
+    @FXML 
+    Button playButton;
+    
+    @FXML
+    Label gameLabel;
 
     @FXML
     private void onMouseClicked(MouseEvent e) {
@@ -74,38 +83,18 @@ public class FXMLDocumentController implements Initializable {
     private void onMouseMoved(MouseEvent e) {
         ship.setPosition(new Vector2D(e.getX(), 575));
     }
-
-    public void addToPane(Node node) {
-        pane.getChildren().add(node);
-    }
-
-    public void removeFromPane(Node node) {
-        pane.getChildren().remove(node);
-    }
-
-    public void shutdown() {
-        if (projectileExecutor != null) {
-            projectileExecutor.shutdown();
-        }
-        Platform.exit();
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        scoreLabel.setText(Integer.toString(score));
-        livesLabel.setText(Integer.toString(ship.getLives()));
+    
+    @FXML
+    private void play(ActionEvent e){
+        
         lastFrameTime = 0.0f;
         long initialTime = System.nanoTime();
-
-        AssetManager.preloadAllAssets();
-        pane.setBackground(AssetManager.getBackgroundImage());
-
-        //Start Background music
-        Media sound = AssetManager.getBackgroundMusic();
-        MediaPlayer mediaPlayer = new MediaPlayer(sound);
-        mediaPlayer.play();
-
-        //Display shields on the pane
+        
+        gameLabel.setVisible(false);
+        playButton.setVisible(false);
+        
+        
+         //Display shields on the pane
         for (int i = 0; i < 3; i++) {
             Shield shield = new Shield(new Vector2D(180 + i * 270, 475));
             shield.getCircle().setFill(AssetManager.getShieldImage());
@@ -286,7 +275,7 @@ public class FXMLDocumentController implements Initializable {
                             double distance = n.magnitude();
 
                             if (distance < projectileCircle.getRadius() + enemyCircle.getRadius()) {
-
+                                enemyList.get(j).getCircle().setFill(AssetManager.getFlash());
                                 removeFromPane(projectileCircle);
 
                                 if (!objectList.isEmpty() && i < objectList.size()) {
@@ -296,6 +285,7 @@ public class FXMLDocumentController implements Initializable {
                                 removeFromPane(enemyCircle);
 
                                 if (!enemyList.isEmpty() && j < enemyList.size()) {
+                                   
                                     enemyList.remove(j);
                                 }
 
@@ -360,6 +350,41 @@ public class FXMLDocumentController implements Initializable {
 
             }
         }.start();
+        
+        
+    }
+    
+
+    public void addToPane(Node node) {
+        pane.getChildren().add(node);
+    }
+
+    public void removeFromPane(Node node) {
+        pane.getChildren().remove(node);
+    }
+
+    public void shutdown() {
+        if (projectileExecutor != null) {
+            projectileExecutor.shutdown();
+        }
+        Platform.exit();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        scoreLabel.setText(Integer.toString(score));
+        livesLabel.setText(Integer.toString(ship.getLives()));
+       
+
+        AssetManager.preloadAllAssets();
+        pane.setBackground(AssetManager.getBackgroundImage());
+
+        //Start Background music
+        Media sound = AssetManager.getBackgroundMusic();
+        mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.play();
+
+       
     }
 
 }

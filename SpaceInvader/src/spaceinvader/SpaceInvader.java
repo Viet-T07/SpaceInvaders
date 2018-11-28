@@ -28,7 +28,7 @@ public class SpaceInvader extends Application {
         
         
         
-        scene.setCursor(Cursor.NONE);
+//        scene.setCursor(Cursor.NONE);
         stage.setScene(scene);
         
         FXMLDocumentController controller = loader.getController();

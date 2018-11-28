@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Line?>
@@ -33,5 +35,18 @@
             <Font name="Space Invaders Regular" size="18.0" />
          </font>
       </Label>
+      <Label fx:id="gameLabel" alignment="CENTER" layoutX="263.0" layoutY="177.0" prefHeight="90.0" prefWidth="373.0" text="Space Invaders" textFill="#ffb700">
+         <font>
+            <Font name="Showcard Gothic" size="42.0" />
+         </font>
+      </Label>
+      <Button fx:id="playButton" layoutX="389.0" layoutY="310.0" mnemonicParsing="false" onAction="#play" prefHeight="39.0" prefWidth="122.0" text="Play">
+         <font>
+            <Font name="Showcard Gothic" size="18.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="DEFAULT" />
+         </cursor>
+      </Button>
    </children>
 </AnchorPane>
