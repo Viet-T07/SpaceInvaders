@@ -64,10 +64,13 @@ public class AssetManager {
         winSound = new AudioClip(fileURL("./assets/music/won.wav"));
         loseSound = new AudioClip(fileURL("./assets/music/lost.wav"));
         shootingSound = new AudioClip(fileURL("./assets/soundfx/hadouken.wav"));
-         
+        alienSound = new AudioClip(fileURL("./assets/soundfx/hit.wav")); 
          
     }
 
+    
+    
+    
     public static ImagePattern getFlash() {
         return flash;
     }

@@ -75,8 +75,8 @@ public class FXMLDocumentController implements Initializable {
         objectList.add(projectile);
 
         //Start Sound
-        AudioClip sound = AssetManager.getShootingSound();
-        sound.play();
+//        AudioClip sound = AssetManager.getShootingSound();
+//        sound.play();
     }
 
     @FXML
@@ -278,7 +278,10 @@ public class FXMLDocumentController implements Initializable {
                             if (distance < projectileCircle.getRadius() + enemyCircle.getRadius()) {
                                 enemyList.get(j).getCircle().setFill(AssetManager.getFlash());
                                 removeFromPane(projectileCircle);
-
+                                
+                                AudioClip hit = AssetManager.getAlienSound();
+                                hit.play();
+                                
                                 if (!objectList.isEmpty() && i < objectList.size()) {
                                     objectList.remove(i);
                                 }
