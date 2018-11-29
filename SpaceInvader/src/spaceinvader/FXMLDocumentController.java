@@ -207,7 +207,6 @@ public class FXMLDocumentController implements Initializable {
                     if (shipDistance < shipCircle.getRadius() + circle2.getRadius()) {
                         
                         if(playerLives.size()-1 > 0){
-                            
                             removeFromPane(playerLives.get(playerLives.size() - 1).getCircle());
                             playerLives.remove(playerLives.size() - 1);
                         }
