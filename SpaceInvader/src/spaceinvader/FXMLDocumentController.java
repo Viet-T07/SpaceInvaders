@@ -142,8 +142,8 @@ public class FXMLDocumentController implements Initializable {
         });
 
         //Display the number of lives
-        for (int i = 0; i < ship.getLives() - 1; i++) {
-            Player shipLives = new Player(new Vector2D(88 + i * 55, 669));
+        for (int i = 0; i < ship.getLives(); i++) {
+            Player shipLives = new Player(new Vector2D(98 + i * 55, 669));
             shipLives.getCircle().setFill(AssetManager.getShipImage());
             playerLives.add(shipLives);
             addToPane(shipLives.getCircle());
@@ -204,30 +204,34 @@ public class FXMLDocumentController implements Initializable {
                     double shipDistance = z.magnitude();
 
                     if (shipDistance < shipCircle.getRadius() + circle2.getRadius()) {
+                        
+                        if(playerLives.size()-1 > 0){
+                            
+                            removeFromPane(playerLives.get(playerLives.size() - 1).getCircle());
+                            playerLives.remove(playerLives.size() - 1);
+                        }
                         ship.setLives(--lives);
                         removeFromPane(circle2);
 
                         if (!alienProjectileList.isEmpty() && i < alienProjectileList.size()) {
                             alienProjectileList.remove(i);
                         }
-                        livesLabel.setText(Integer.toString(lives));
+                        livesLabel.setText("Lives "+Integer.toString(lives));
 
                         if (ship.getLives() == 0) {
                             loseLabel.setVisible(true);
                             mediaPlayer.stop();
-
+                            
+                            
+                            removeFromPane(playerLives.get(0).getCircle());
+                            playerLives.remove(0);
                             AudioClip lost = AssetManager.getLoseSound();
                             lost.play();
 
                             //Stop animation/executor
                             this.stop();
                             projectileExecutor.shutdown();
-                        } else if (ship.getLives() <= 1) {
-                            playerLives.remove(playerLives.size() - 1);
-                            removeFromPane(playerLives.get(playerLives.size() - 1).getCircle());
-
-                        }
-
+                        } 
                     }
                     if (!alienProjectileList.isEmpty() && i < alienProjectileList.size()) {
                         alienProjectileList.get(i).update(frameDeltaTime);
@@ -373,7 +377,7 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         scoreLabel.setText(Integer.toString(score));
-        livesLabel.setText(Integer.toString(ship.getLives()));
+        livesLabel.setText("Lives " + Integer.toString(ship.getLives()));
        
 
         AssetManager.preloadAllAssets();
