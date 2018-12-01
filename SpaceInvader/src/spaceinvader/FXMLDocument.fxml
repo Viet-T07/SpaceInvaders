@@ -7,7 +7,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="pane" onMouseClicked="#onMouseClicked" onMouseMoved="#onMouseMoved" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="spaceinvader.FXMLDocumentController">
+<AnchorPane id="AnchorPane" fx:id="pane" onMouseMoved="#onMouseMoved" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="spaceinvader.FXMLDocumentController">
    <children>
       <Label fx:id="winLabel" alignment="CENTER" layoutX="283.0" layoutY="248.0" prefHeight="52.0" prefWidth="334.0" text="You Win!" textFill="#37da48" visible="false">
          <font>
@@ -30,7 +30,7 @@
          </font>
       </Label>
       <Line endX="791.0" layoutX="109.0" layoutY="625.0" startX="-108.9999771118164" stroke="#37da48" />
-      <Label fx:id="livesLabel" alignment="CENTER" layoutX="8.0" layoutY="644.0" prefHeight="39.0" prefWidth="67.0" text="Lives" textFill="#37da48">
+      <Label fx:id="livesLabel" layoutX="8.0" layoutY="644.0" prefHeight="39.0" prefWidth="149.0" text="Lives" textFill="#37da48">
          <font>
             <Font name="Space Invaders Regular" size="18.0" />
          </font>
@@ -48,5 +48,6 @@
             <Cursor fx:constant="DEFAULT" />
          </cursor>
       </Button>
+      <AnchorPane fx:id="startPane" mouseTransparent="true" onMouseClicked="#onMouseClicked" prefHeight="700.0" prefWidth="900.0" />
    </children>
 </AnchorPane>

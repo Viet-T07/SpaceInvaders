@@ -48,7 +48,10 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     AnchorPane pane;
-
+    
+    @FXML
+    AnchorPane startPane;
+    
     @FXML
     Label winLabel;
 
@@ -67,25 +70,12 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     Label gameLabel;
 
-    @FXML
-    private void onMouseClicked(MouseEvent e) {
-        Projectile projectile = ship.shoot(ship.getPosition());
-        projectile.getCircle().setFill(AssetManager.getProjectileImage());
-        addToPane(projectile.getCircle());
-        objectList.add(projectile);
-
-        //Start Sound
-//        AudioClip sound = AssetManager.getShootingSound();
-//        sound.play();
-    }
-
-    @FXML
-    private void onMouseMoved(MouseEvent e) {
-        ship.setPosition(new Vector2D(e.getX(), 575));
-    }
+    
     
     @FXML
     private void play(ActionEvent e){
+        
+        startPane.setMouseTransparent(false);
         
         lastFrameTime = 0.0f;
         long initialTime = System.nanoTime();
@@ -144,7 +134,7 @@ public class FXMLDocumentController implements Initializable {
 
         //Display the number of lives
         for (int i = 0; i < ship.getLives(); i++) {
-            Player shipLives = new Player(new Vector2D(98 + i * 55, 669));
+            Player shipLives = new Player(new Vector2D(118 + i * 55, 669));
             shipLives.getCircle().setFill(AssetManager.getShipImage());
             playerLives.add(shipLives);
             addToPane(shipLives.getCircle());
@@ -361,7 +351,24 @@ public class FXMLDocumentController implements Initializable {
         
     }
     
+    @FXML
+    private void onMouseClicked(MouseEvent e) {
+        Projectile projectile = ship.shoot(ship.getPosition());
+        projectile.getCircle().setFill(AssetManager.getProjectileImage());
+        addToPane(projectile.getCircle());
+        objectList.add(projectile);
 
+        //Start Sound
+        AudioClip sound = AssetManager.getShootingSound();
+        sound.play();
+    }
+
+    @FXML
+    private void onMouseMoved(MouseEvent e) {
+        ship.setPosition(new Vector2D(e.getX(), 575));
+    }
+    
+    
     public void addToPane(Node node) {
         pane.getChildren().add(node);
     }
@@ -391,7 +398,7 @@ public class FXMLDocumentController implements Initializable {
         mediaPlayer = new MediaPlayer(sound);
         mediaPlayer.play();
 
-       
+        
     }
 
 }
