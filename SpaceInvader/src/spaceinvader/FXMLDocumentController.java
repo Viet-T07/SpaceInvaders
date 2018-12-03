@@ -118,7 +118,6 @@ public class FXMLDocumentController implements Initializable {
                     @Override
                     public void run() {
                         int randomEnemy = (int) (Math.random() * enemyList.size());
-                        
                         Projectile projectile = enemyList.get(randomEnemy).shoot(enemyList.get(randomEnemy).getPosition());
                         projectile.getCircle().setFill(AssetManager.getAlienProjectile());
                         alienProjectileList.add(projectile);
@@ -342,6 +341,7 @@ public class FXMLDocumentController implements Initializable {
                     mediaPlayer.stop();
                     AudioClip winSound = AssetManager.getWinSound();
                     winSound.play();
+                    projectileExecutor.shutdown();
                     this.stop();
                 }
 
