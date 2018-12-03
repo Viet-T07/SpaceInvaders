@@ -29,6 +29,8 @@ public class AssetManager {
     static private ImagePattern shipImage = null;
     static private ImagePattern alienProjectile = null;
     static private ImagePattern flash = null;
+    static private Image play = null;
+    static private Image restart = null;
     
     static private Media backgroundMusic = null;
     static private AudioClip winSound = null;
@@ -59,6 +61,8 @@ public class AssetManager {
         shipImage = new ImagePattern(new Image(fileURL("./assets/images/ship.png")));
         shieldImage = new ImagePattern(new Image(fileURL("./assets/images/shield.png")));
         flash = new ImagePattern(new Image(fileURL("./assets/images/flash.png")));
+        play = (new Image(fileURL("./assets/images/play_button.png")));
+        restart = (new Image(fileURL("./assets/images/restart.png")));
         
         backgroundMusic = new Media(fileURL("./assets/music/playing.mp3"));
         winSound = new AudioClip(fileURL("./assets/music/won.wav"));
@@ -68,9 +72,14 @@ public class AssetManager {
          
     }
 
-    
-    
-    
+    public static Image getPlay() {
+        return play;
+    }
+
+    public static Image getRestart() {
+        return restart;
+    }
+
     public static ImagePattern getFlash() {
         return flash;
     }

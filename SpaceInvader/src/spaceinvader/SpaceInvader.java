@@ -28,7 +28,6 @@ public class SpaceInvader extends Application {
         
         
         
-//        scene.setCursor(Cursor.NONE);
         stage.setScene(scene);
         
         FXMLDocumentController controller = loader.getController();
@@ -37,6 +36,8 @@ public class SpaceInvader extends Application {
         stage.show();
     }
 
+    
+    
     /**
      * @param args the command line arguments
      */

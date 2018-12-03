@@ -15,16 +15,21 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 
 /**
  *
@@ -70,19 +75,101 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     Label gameLabel;
 
+    @FXML
+    Button restartButton;
+    
+    @FXML
+    public void restartButton(ActionEvent event) throws Exception{
+        
+        Stage appStage;
+        URL sceneFile = getClass().getResource("FXMLDocument.fxml");
+        FXMLLoader loader = new FXMLLoader(sceneFile);
+        Parent root = loader.load();
+        if(event.getSource() == restartButton){
+            appStage = (Stage) restartButton.getScene().getWindow();
+            
+            Scene scene = new Scene(root);
+            appStage.setScene(scene);
+            appStage.show();
+            
+        }
+        
+    }
     
     
     @FXML
     private void play(ActionEvent e){
         
         startPane.setMouseTransparent(false);
-        
-        lastFrameTime = 0.0f;
-        long initialTime = System.nanoTime();
-        
         gameLabel.setVisible(false);
-        playButton.setVisible(false);
+        playButton.setVisible(false); 
         
+        gameStart();
+    }
+    
+    @FXML
+    private void onMouseClicked(MouseEvent e) {
+        Projectile projectile = ship.shoot(ship.getPosition());
+        projectile.getCircle().setFill(AssetManager.getProjectileImage());
+        addToPane(projectile.getCircle());
+        objectList.add(projectile);
+
+        //Start Sound
+        AudioClip sound = AssetManager.getShootingSound();
+        sound.play();
+    }
+
+    @FXML
+    private void onMouseMoved(MouseEvent e) {
+        ship.setPosition(new Vector2D(e.getX(), 575));
+    }
+    
+    
+    public void addToPane(Node node) {
+        pane.getChildren().add(node);
+    }
+
+    public void removeFromPane(Node node) {
+        pane.getChildren().remove(node);
+    }
+
+    public void shutdown() {
+        if (projectileExecutor != null) {
+            projectileExecutor.shutdown();
+        }
+        Platform.exit();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        AssetManager.preloadAllAssets();
+        
+        restartButton.setBackground(Background.EMPTY);
+        restartButton.setMaxSize(389, 310);
+        
+
+        playButton.setBackground(Background.EMPTY);
+        playButton.setMaxSize(389, 310);
+        
+        scoreLabel.setText(Integer.toString(score));
+        livesLabel.setText("Lives " + Integer.toString(ship.getLives()));
+        
+        restartButton.setVisible(false);
+        restartButton.setDisable(true);
+        
+        
+        pane.setBackground(AssetManager.getBackgroundImage());
+
+        //Start Background music
+        Media sound = AssetManager.getBackgroundMusic();
+        mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.play();
+
+    }
+    
+    public void gameStart(){
+         lastFrameTime = 0.0f;
+        long initialTime = System.nanoTime();
         
          //Display shields on the pane
         for (int i = 0; i < 3; i++) {
@@ -208,6 +295,9 @@ public class FXMLDocumentController implements Initializable {
                         livesLabel.setText("Lives "+Integer.toString(lives));
 
                         if (ship.getLives() == 0) {
+                            restartButton.setVisible(true);
+                            restartButton.setDisable(false);
+                            
                             loseLabel.setVisible(true);
                             mediaPlayer.stop();
                             
@@ -241,7 +331,11 @@ public class FXMLDocumentController implements Initializable {
                     Vector2D c2 = new Vector2D(enemyCircle.getCenterX(), enemyCircle.getCenterY());
                     Vector2D z = c2.sub(ship);
                     double shipDistance = z.magnitude();
+                    
                     if (shipDistance < shipCircle.getRadius() + enemyCircle.getRadius()) {
+                        restartButton.setVisible(true);
+                        restartButton.setDisable(false);
+                        
                         loseLabel.setVisible(true);
                         mediaPlayer.stop();
                         AudioClip lost = AssetManager.getLoseSound();
@@ -305,6 +399,7 @@ public class FXMLDocumentController implements Initializable {
 
                             Vector2D n = c2.sub(c1);
                             double distance = n.magnitude();
+                            
                             if (distance < projectileCircle.getRadius() + shieldCircle.getRadius()) {
                                 removeFromPane(alienProjectileList.get(j).getCircle());
                                 alienProjectileList.remove(j);
@@ -324,7 +419,9 @@ public class FXMLDocumentController implements Initializable {
                             Vector2D c2 = new Vector2D(shieldCircle.getCenterX(), shieldCircle.getCenterY());
 
                             Vector2D n = c2.sub(c1);
+                            
                             double distance = n.magnitude();
+                            
                             if (distance < projectileCircle.getRadius() + shieldCircle.getRadius()) {
                                 removeFromPane(objectList.get(j).getCircle());
                                 objectList.remove(j);
@@ -337,6 +434,10 @@ public class FXMLDocumentController implements Initializable {
 
                 //Set the win condition
                 if (enemyList.isEmpty()) {
+                    
+                    restartButton.setVisible(true);
+                    restartButton.setDisable(false);
+                    
                     winLabel.setVisible(true);
                     mediaPlayer.stop();
                     AudioClip winSound = AssetManager.getWinSound();
@@ -347,58 +448,5 @@ public class FXMLDocumentController implements Initializable {
 
             }
         }.start();
-        
-        
     }
-    
-    @FXML
-    private void onMouseClicked(MouseEvent e) {
-        Projectile projectile = ship.shoot(ship.getPosition());
-        projectile.getCircle().setFill(AssetManager.getProjectileImage());
-        addToPane(projectile.getCircle());
-        objectList.add(projectile);
-
-        //Start Sound
-        AudioClip sound = AssetManager.getShootingSound();
-        sound.play();
-    }
-
-    @FXML
-    private void onMouseMoved(MouseEvent e) {
-        ship.setPosition(new Vector2D(e.getX(), 575));
-    }
-    
-    
-    public void addToPane(Node node) {
-        pane.getChildren().add(node);
-    }
-
-    public void removeFromPane(Node node) {
-        pane.getChildren().remove(node);
-    }
-
-    public void shutdown() {
-        if (projectileExecutor != null) {
-            projectileExecutor.shutdown();
-        }
-        Platform.exit();
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        scoreLabel.setText(Integer.toString(score));
-        livesLabel.setText("Lives " + Integer.toString(ship.getLives()));
-       
-
-        AssetManager.preloadAllAssets();
-        pane.setBackground(AssetManager.getBackgroundImage());
-
-        //Start Background music
-        Media sound = AssetManager.getBackgroundMusic();
-        mediaPlayer = new MediaPlayer(sound);
-        mediaPlayer.play();
-
-        
-    }
-
 }
