@@ -50,7 +50,9 @@ public class FXMLDocumentController implements Initializable {
     private int lives = ship.getLives();
     ScheduledExecutorService projectileExecutor = null;
     private MediaPlayer mediaPlayer;
-
+    private static AudioClip winSound;
+    private static AudioClip lost;
+    
     @FXML
     AnchorPane pane;
     
@@ -80,6 +82,13 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     public void restartButton(ActionEvent event) throws Exception{
+        
+        if(winSound.isPlaying() && winSound != null){
+            winSound.stop();
+        }
+        else if(lost.isPlaying() && lost != null){
+            lost.stop();
+        }
         
         Stage appStage;
         URL sceneFile = getClass().getResource("FXMLDocument.fxml");
@@ -304,7 +313,7 @@ public class FXMLDocumentController implements Initializable {
                             
                             removeFromPane(playerLives.get(0).getCircle());
                             playerLives.remove(0);
-                            AudioClip lost = AssetManager.getLoseSound();
+                            lost = AssetManager.getLoseSound();
                             lost.play();
 
                             //Stop animation/executor
@@ -338,7 +347,7 @@ public class FXMLDocumentController implements Initializable {
                         
                         loseLabel.setVisible(true);
                         mediaPlayer.stop();
-                        AudioClip lost = AssetManager.getLoseSound();
+                        lost = AssetManager.getLoseSound();
                         lost.play();
                         this.stop();
                     }
@@ -440,7 +449,7 @@ public class FXMLDocumentController implements Initializable {
                     
                     winLabel.setVisible(true);
                     mediaPlayer.stop();
-                    AudioClip winSound = AssetManager.getWinSound();
+                    winSound = AssetManager.getWinSound();
                     winSound.play();
                     projectileExecutor.shutdown();
                     this.stop();
